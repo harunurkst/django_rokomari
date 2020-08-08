@@ -1,0 +1,13 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+<div class="card">
+    <div class="card-header">Writer Detail</div>
+    <div class="card-body">
+        <h1>{{ writer.name }}</h1>
+        <p>{{ writer.description }}</p>
+    </div>
+</div>
+
+{% endblock %}
