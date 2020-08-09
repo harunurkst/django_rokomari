@@ -3,17 +3,26 @@
 
 {% block content %}
 <div class="card">
-    <div class="card-header">Writer List</div>
+    <div class="card-header">
+            Writer List
+            <a href="{% url 'writer-create' %}" class="btn btn-success float-right">Create New</a>
+
+    </div>
     <div class="card-body">
         <table class="table">
             <tr>
                 <th>S/L</th>
                 <th>Name</th>
+                <th>Action</th>
             </tr>
             {% for writer in writers %}
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td><a href="{% url 'writer_detail' writer.pk %}">{{ writer.name }}</a></td>
+                <td>
+                    <a href="{% url 'writer-edit' writer.pk %} " class="btn btn-primary">Edit</a>
+                    <a href="{% url 'writer-delete' writer.pk %} " class="btn btn-danger">Delete</a>
+                </td>
             </tr>
             {% endfor %}
 
