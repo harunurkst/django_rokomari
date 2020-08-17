@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+import decimal
 
 
 class Category(models.Model):
@@ -7,6 +8,14 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ItemManager(models.Manager):
+    def new_items(self):
+        return self.all().order_by('-pk')[:10]
+
+    def top_items(self):
+        return self.all().order_by('-sell_count')[:10]
 
 
 class Item(models.Model):
@@ -31,6 +40,14 @@ class Item(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     sell_count = models.IntegerField(default=0)
     featured_image = models.ImageField(upload_to='featured_image', blank=True, null=True)
+
+    objects = ItemManager()
+
+    @property
+    def discount(self):
+        d = self.old_price - self.new_price
+        d_rate = (d * 100) / self.old_price
+        return d_rate
 
     def __str__(self):
         return self.name
