@@ -1,6 +1,5 @@
 from django.db import models
-from django.urls import reverse
-import decimal
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -61,4 +60,18 @@ class Gallery(models.Model):
         return str(self.pk)
 
 
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return str(self.pk)
+
+
+class CartItem(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.item.name

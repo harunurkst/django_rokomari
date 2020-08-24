@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View, DetailView
-from .models import Item
+from django.contrib import messages
+from .models import Item, Cart, CartItem
 from .forms import AddToCartForm
 
 
@@ -30,5 +31,16 @@ class ItemDetailView(DetailView):
         context['form'] = AddToCartForm(instance=object)
         return context
 
+
+class AddToCartView(View):
+    def get(self, request):
+        qty = request.GET.get("qty", 1)
+        item_id = request.GET.get("item_id")
+        item = Item.objects.get(pk=item_id)
+
+        cart_obj, created = Cart.objects.get_or_create(user=request.user, is_active=True)
+        CartItem.objects.create(item=item, quantity=qty, cart=cart_obj)
+        messages.success(request, 'Profile details updated.')
+        return redirect('home')
 
 

@@ -77,8 +77,7 @@
 							</div>
 							<p>{{ product.description }}</p>
 
-							<form action="" method="post">
-								{% csrf_token %}
+							<form action="{% url 'add-to-cart' %}" method="get">
 								<div class="product-options">
 									<label>
 										 {{ form.size.label_tag }}
@@ -99,7 +98,8 @@
 											<span class="qty-down">-</span>
 										</div>
 									</div>
-									<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+									<input type="hidden" name="item_id" value="{{ object.pk }}">
+									<button type="submit" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 								</div>
 							</form>
 
