@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <h1>{{ user.get_full_name }} </h1>
+        <p>{{ user.profile.phone }}</p>
+        {% if user.profile.photo %}
+        <img src="{{ user.profile.photo.url }}" alt="">
+        {% endif %}
+
+    </div>
+</div>
+
+<a href="{% url 'edit-profile' %}" class="btn btn-primary">Edit</a>
+
+
+
+{% endblock %}

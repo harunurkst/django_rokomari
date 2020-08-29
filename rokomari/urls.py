@@ -25,6 +25,7 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('dashboard/', include('dashboard.urls')),
     path('product/', include('product.urls')),
+    path('accounts/', include('account.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -71,7 +71,11 @@ class Cart(models.Model):
 class CartItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_item')
+
+    @property
+    def price(self):
+        return self.quantity * self.item.new_price
 
     def __str__(self):
         return self.item.name

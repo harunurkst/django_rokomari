@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'product',
     'dashboard',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,4 @@ STATICFILES_DIRS = (
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+

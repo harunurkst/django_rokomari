@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from .models import Item, Cart, CartItem
 from .forms import AddToCartForm
@@ -32,7 +33,7 @@ class ItemDetailView(DetailView):
         return context
 
 
-class AddToCartView(View):
+class AddToCartView(LoginRequiredMixin, View):
     def get(self, request):
         qty = request.GET.get("qty", 1)
         item_id = request.GET.get("item_id")
@@ -40,7 +41,16 @@ class AddToCartView(View):
 
         cart_obj, created = Cart.objects.get_or_create(user=request.user, is_active=True)
         CartItem.objects.create(item=item, quantity=qty, cart=cart_obj)
-        messages.success(request, 'Profile details updated.')
+        messages.success(request, 'Item added to your cart')
         return redirect('home')
 
+
+class Checkout(LoginRequiredMixin, View):
+    def get(self, request):
+        cart = Cart.objects.get(user=request.user, is_active=True)
+        print(cart)
+        context = {
+            'cart': cart
+        }
+        return render(request, 'product/checkout.html', context)
 
