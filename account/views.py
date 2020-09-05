@@ -73,6 +73,7 @@ def user_login(request):
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
+                print("login done")
                 return redirect('home')
             context = {
                 'form': form,
