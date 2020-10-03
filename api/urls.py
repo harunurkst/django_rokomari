@@ -8,4 +8,5 @@ urlpatterns = [
     path('create-item/', views.CreateProductView.as_view()),
     path('create-category/', views.CreateCategoryAPI.as_view()),
     path('update-category/<int:cid>/', views.UpdateCategoryApi.as_view()),
+    path('test', views.TestAuth.as_view()),
 ]
