@@ -1,15 +1,20 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 from django.contrib import messages
+import stripe
 from .models import Item, Cart, CartItem
 from .forms import AddToCartForm
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class HomeView(View):
     def get(self, request):
-        new_product = Item.objects.new_items()
-        top_product = Item.objects.top_items()
+        all_items = Item.objects.all().select_related('category')
+        new_product = all_items.order_by('-pk')[:10]
+        top_product = all_items.order_by('-sell_count')[:10]
         context = {
             'new_product': new_product,
             'top_product': top_product
@@ -48,9 +53,12 @@ class AddToCartView(LoginRequiredMixin, View):
 class Checkout(LoginRequiredMixin, View):
     def get(self, request):
         cart = Cart.objects.get(user=request.user, is_active=True)
-        print(cart)
+
+
         context = {
-            'cart': cart
+            'cart': cart,
+            'paypal_client_id': settings.PAYPAL_CLIENT_ID,
+            'strip_pub_key': settings.STRIPE_PUBLISHABLE_KEY
         }
         return render(request, 'product/checkout.html', context)
 

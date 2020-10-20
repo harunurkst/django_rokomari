@@ -9,4 +9,5 @@ urlpatterns = [
     path('create-category/', views.CreateCategoryAPI.as_view()),
     path('update-category/<int:cid>/', views.UpdateCategoryApi.as_view()),
     path('test', views.TestAuth.as_view()),
+    path('get-stripe-session/', views.CreateStripeSession.as_view()),
 ]

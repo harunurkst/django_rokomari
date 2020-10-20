@@ -7,7 +7,7 @@ register = template.Library()
 @register.simple_tag
 def my_cart_items(username):
     print("username", username)
-    items = CartItem.objects.filter(cart__user__username=username)
+    items = CartItem.objects.filter(cart__user__username=username, cart__is_active=True)
     return {'items': items, 'count': items.count()}
 
 

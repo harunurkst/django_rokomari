@@ -127,7 +127,7 @@
 					</div>
 					<div class="order-col">
 						<div><strong>TOTAL</strong></div>
-						<div><strong class="order-total">$2940.00</strong></div>
+						<div><strong class="order-total">{{ cart.total_price }}</strong></div>
 					</div>
 				</div>
 				<div class="payment-method">
@@ -145,10 +145,10 @@
 						<input type="radio" name="payment" id="payment-2">
 						<label for="payment-2">
 							<span></span>
-							Cheque Payment
+							Card Payment
 						</label>
 						<div class="caption">
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+							<button id="checkout-button">Checkout</button>
 						</div>
 					</div>
 					<div class="input-radio">
@@ -158,8 +158,9 @@
 							Paypal System
 						</label>
 						<div class="caption">
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+							<div id="paypal-button-container"></div>
 						</div>
+
 					</div>
 				</div>
 				<div class="input-checkbox">
@@ -178,4 +179,61 @@
 	<!-- /container -->
 </div>
 <!-- /SECTION -->
+{% endblock %}
+
+{% block script %}
+<script src="https://www.paypal.com/sdk/js?client-id={{ paypal_client_id }}"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    paypal.Buttons({
+		createOrder: function(data, actions) {
+		  // This function sets up the details of the transaction, including the amount and line item details.
+		  return actions.order.create({
+			purchase_units: [{
+			  amount: {
+				value: {{ cart.total_price }}
+			  }
+			}]
+		  });
+		},
+		onApprove: function(data, actions) {
+		  return actions.order.capture().then(function(details) {
+			// This function shows a transaction success message to your buyer.
+			alert('Transaction completed by ' + details.payer.name.given_name);
+		  });
+		}
+  }).render('#paypal-button-container');
+    // This function displays Smart Payment Buttons on your web page.
+  </script>
+ <script type="text/javascript">
+      // Create an instance of the Stripe object with your publishable API key
+      var stripe = Stripe('{{ strip_pub_key }}');
+      var checkoutButton = document.getElementById('checkout-button');
+
+      checkoutButton.addEventListener('click', function() {
+        // Create a new Checkout Session using the server-side endpoint you
+        // created in step 3.
+        fetch('/api/get-stripe-session/', {
+          method: 'POST',
+        })
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(session) {
+          return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(function(result) {
+        	console.log(result);
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, you should display the localized error message to your
+          // customer using `error.message`.
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(function(error) {
+          console.error('Error:', error);
+        });
+      });
+    </script>
 {% endblock %}

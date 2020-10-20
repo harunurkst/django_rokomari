@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum
 
 
 class Category(models.Model):
@@ -11,10 +12,10 @@ class Category(models.Model):
 
 class ItemManager(models.Manager):
     def new_items(self):
-        return self.all().order_by('-pk')[:10]
+        return self.all().select_related('category').order_by('-pk')[:10]
 
     def top_items(self):
-        return self.all().order_by('-sell_count')[:10]
+        return self.all().select_related('category').order_by('-sell_count')[:10]
 
 
 class Item(models.Model):
@@ -35,7 +36,7 @@ class Item(models.Model):
     description = models.TextField()
     size = models.CharField(max_length=5, choices=SIZE_CHOICE)
     color = models.CharField(max_length=5, choices=COLOR_CHOICE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
     sell_count = models.IntegerField(default=0)
     featured_image = models.ImageField(upload_to='featured_image', blank=True, null=True)
@@ -63,6 +64,10 @@ class Gallery(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
+
+    def total_price(self):
+
+        return 500.00
 
     def __str__(self):
         return str(self.pk)

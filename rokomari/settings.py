@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    #'debug_toolbar',
     'rest_framework',
     'product',
     'dashboard',
@@ -54,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'rokomari.urls'
@@ -139,4 +142,13 @@ STATICFILES_DIRS = (
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+# INTERNAL_IPS = [
+#     '127.0.0.1',
+# ]
+
+PAYPAL_CLIENT_ID = 'AaTIONxN0zTlDzXZMrZlF4-vvQiwKUxnBECcR1NuzyiipqKrj9KG2mv2x4XGmQZSEthr7jai6_PyqzCf'
+PAYPAL_CLIENT_SECRET = 'EC_LoUTISVSLUubwJk81EHiXXBAvUJ8Jg8BRRDHeEUW22Z_SpJ9svkgZY1FbZY68lcTUMdt10kcQyVqh'
+STRIPE_SECRET_KEY = 'sk_test_eFiTK83IcdG9jjXbn1ySvvbv00qtdpUIyu'
+STRIPE_PUBLISHABLE_KEY = 'pk_test_v0dnd3kSD12lIdtFaIVNqDmp00pikTntkM'
 
