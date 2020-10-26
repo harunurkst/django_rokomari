@@ -12,6 +12,15 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
+import environ
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 MEDIA_DIR = BASE_DIR / 'media'
@@ -22,10 +31,10 @@ STATIC_DIR = BASE_DIR / 'static'
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'jf0tz&n+^aw(0nhz@b)7xjsp_893qfx52b=v7^j+qphefl(6&4'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['13.235.241.176',]
 
@@ -87,9 +96,9 @@ WSGI_APPLICATION = 'rokomari.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'myproject',
-	'USER': 'harun',
-        'PASSWORD': 'nothing1234',
+        'NAME': env('DB_NAME'),
+	    'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -157,3 +166,5 @@ PAYPAL_CLIENT_SECRET = 'EC_LoUTISVSLUubwJk81EHiXXBAvUJ8Jg8BRRDHeEUW22Z_SpJ9svkgZ
 STRIPE_SECRET_KEY = 'sk_test_eFiTK83IcdG9jjXbn1ySvvbv00qtdpUIyu'
 STRIPE_PUBLISHABLE_KEY = 'pk_test_v0dnd3kSD12lIdtFaIVNqDmp00pikTntkM'
 
+
+from .local_settings import *
